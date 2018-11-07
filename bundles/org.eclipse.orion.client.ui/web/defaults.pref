@@ -11,5 +11,6 @@
 		"edit/content/jsonEditorPlugin.html":true,
 		"cfui/plugins/cFPlugin.html":true,
 		"cfui/plugins/cFDeployPlugin.html":true
-	}
+	},
+	"/general/settings":{"generalSettings": {"enableDebuggerVisible": true}}
 }

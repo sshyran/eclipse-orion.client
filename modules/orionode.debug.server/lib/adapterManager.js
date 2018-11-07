@@ -60,7 +60,7 @@ function createAdapter(type) {
     if (!adapterConfig) {
         throw new Error('Adapter type ' + type + ' has not been registered.');
     }
-    return new DebugAdapter(adaptersConfig[type], adaptersCwd[type]);
+    return DebugAdapter(adaptersConfig[type], adaptersCwd[type]);
 }
 
 /**

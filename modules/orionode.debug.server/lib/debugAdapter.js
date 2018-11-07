@@ -12,8 +12,9 @@
 'use strict';
 
 var cp = require('child_process');
-var ProtocolServer = require('./protocol').ProtocolServer;
 var DebugProtocol = require('vscode-debugprotocol');
+var VSCodeProtocol = require('vscode-debugadapter/lib/protocol');
+var Messages = require('vscode-debugadapter/lib/messages');
 
 /**
  * A debug adapter that implements the Visual Studio Code Debug Protocol
@@ -24,10 +25,72 @@ var DebugProtocol = require('vscode-debugprotocol');
  * @param {string} cwd
  */
 var DebugAdapter = function(debuggerConfig, cwd) {
-    ProtocolServer.call(this);
-
-    var that = this;
-
+    var protocol = new VSCodeProtocol.ProtocolServer();
+    protocol._handleData = function(data) {
+        this._rawData = Buffer.concat([this._rawData, data]);
+        while (true) {
+            if (this._contentLength >= 0) {
+                if (this._rawData.length >= this._contentLength) {
+                    var message = this._rawData.toString('utf8', 0, this._contentLength);
+                    this._rawData = this._rawData.slice(this._contentLength);
+                    this._contentLength = -1;
+                    if (message.length > 0) {
+                        try {
+                            var msg = JSON.parse(message);
+                            if (msg.type === 'request') {
+                                this.dispatchRequest(msg);
+                            }
+                            else if (msg.type === 'response') {
+                                var response = msg;
+                                var clb = this._pendingRequests.get(response.request_seq);
+                                if (clb) {
+                                    this._pendingRequests.delete(response.request_seq);
+                                    clb(response);
+                                }
+                            }
+                            else if (msg.type === 'event') {
+                                this.emit('event', msg);
+                            }
+                        }
+                        catch (e) {
+                            this._emitEvent(new Messages.Event('error'));
+                        }
+                    }
+                    continue; // there may be more complete messages to process
+                }
+            }
+            else {
+                var idx = this._rawData.indexOf(VSCodeProtocol.ProtocolServer.TWO_CRLF);
+                if (idx !== -1) {
+                    var header = this._rawData.toString('utf8', 0, idx);
+                    var lines = header.split('\r\n');
+                    for (var i = 0; i < lines.length; i++) {
+                        var pair = lines[i].split(/: +/);
+                        if (pair[0] == 'Content-Length') {
+                            this._contentLength = +pair[1];
+                        }
+                    }
+                    this._rawData = this._rawData.slice(idx + VSCodeProtocol.ProtocolServer.TWO_CRLF.length);
+                    continue;
+                }
+            }
+            break;
+        }
+    };
+    protocol.dispatchRequest = function(request) {
+        this.emit('request', request);
+    };
+    protocol.dispose = function() {
+        if (this._adapterOn) {
+            var adapter = this._adapter;
+            this.sendRequest('disconnect', {
+                restart: false
+            }, 1000, function(response) {
+                adapter.kill('SIGINT');
+            });
+        }
+    };
+    
     // Save CWD
     // We can safely do this because node is a single thread environment
     var cwdOrig = process.cwd();
@@ -47,56 +110,21 @@ var DebugAdapter = function(debuggerConfig, cwd) {
         program = debuggerConfig.program;
         args = debuggerConfig.args || [];
     }
-    this._adapter = cp.spawn(program, args);
-    this._adapterOn = !!this._adapter;
-    this.start(this._adapter.stdout, this._adapter.stdin);
-    this._adapter.stderr.on('data', function(data) {
+    protocol._adapter = cp.spawn(program, args);
+    protocol._adapterOn = !!protocol._adapter;
+    protocol.start(protocol._adapter.stdout, protocol._adapter.stdin);
+    protocol._adapter.stderr.on('data', function(data) {
         console.error(data.toString());
     });
-    this._adapter.on('exit', function() {
-        that._adapterOn = false;
-        that.emit('disposed');
+    protocol._adapter.on('exit', function() {
+        protocol._adapterOn = false;
+        protocol.emit('disposed');
     });
-
-    // Received data
-    this._rawData = new Buffer(0);
 
     // Restore CWD
     process.chdir(cwdOrig);
-};
-
-DebugAdapter.prototype = Object.create(ProtocolServer.prototype);
-DebugAdapter.prototype.constructor = DebugAdapter;
-
-/**
- * Handle a request from the debugger
- * @param {DebugProtocol.Request} request
- */
-DebugAdapter.prototype.dispatchRequest = function(request) {
-    this.emit('request', request);
-};
-
-/**
- * Handle an event from the debugger
- * @param {DebugProtocol.Event} event
- */
-DebugAdapter.prototype.handleEvent = function(event) {
-    this.emit('event', event);
-};
-
-/**
- * Dispose the adapter.
- * Always dispose a debugger! Otherwise the subprocess won't exit.
- */
-DebugAdapter.prototype.dispose = function() {
-    var that = this;
-    if (this._adapterOn) {
-        this.sendRequest('disconnect', {
-            restart: false
-        }, 1000, function(response) {
-            that._adapter.kill('SIGINT');
-        });
-    }
+    
+    return protocol;
 };
 
 module.exports = DebugAdapter;

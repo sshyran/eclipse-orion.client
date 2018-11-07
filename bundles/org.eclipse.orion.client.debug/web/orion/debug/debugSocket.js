@@ -241,10 +241,10 @@ define([
      */
     DebugSocket.prototype.absoluteToProjectPath = function(path) {
         var project = path.startsWith(this._remoteRoot) ? this._localRoot + path.substr(this._remoteRoot.length) : path;
-        if (!this._remoteRoot.startsWith('/')) {
-            // Windows
-            project = project.replace('\\', '/');
-        }
+//        if (!this._remoteRoot.startsWith('/')) {
+//            // Windows
+//            project = project.replace('\\', '/');
+//        }
         return project;
     };
 
@@ -255,10 +255,10 @@ define([
      */
     DebugSocket.prototype.projectToAbsolutePath = function(path) {
         var absolute = path.startsWith(this._localRoot) ? this._remoteRoot + path.substr(this._localRoot.length) : path;
-        if (!this._remoteRoot.startsWith('/')) {
-            // Windows
-            absolute = absolute.replace('/', '\\');
-        }
+//        if (!this._remoteRoot.startsWith('/')) {
+//            // Windows
+//            absolute = absolute.replace('/', '\\');
+//        }
         return absolute;
     };
 
