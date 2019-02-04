@@ -980,7 +980,7 @@ define([
 						this.ignoreFetch = true;
 						var done = function() {
 							this.ignoreFetch = false;
-							this.changedItem();
+							return this.changedItem();
 						}.bind(this);
 						return Deferred.all(remotes).then(done, done);
 					}
