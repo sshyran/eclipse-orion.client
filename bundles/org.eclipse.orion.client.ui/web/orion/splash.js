@@ -103,7 +103,10 @@ function loader( domNode, title ){
 	}
 
 	this.template = '<div class="splashLoader">' +
-						'<label class="splashAbout" for="progressbar">' + this.title + '</label>' +
+						'<div role="alert" aria-live="assertive">' +
+							'<label class="splashAbout" for="progressbar">' + this.title + '</label>' +
+							'<div id="alertMessage" class="visuallyhidden"></div>' +
+						'</div>' +
 						'<div class="splashProgressbar">' +
 							'<progress id ="progressbar" aria-describedby="stepMessages"></progress>' +
 						'</div>' +
@@ -202,6 +205,8 @@ loader.prototype.initialize = function(){
 	this.splashProgress = document.getElementById( "progressbar" );
 	this.stepMessages = document.getElementById( "stepMessages" );
 	this.splashProgress.value = 0;
+	this.alertMessage = document.getElementById( "alertMessage" );
+	this.alertMessage.textContent = "Please wait...";
 };
 
 loader.prototype.emptySteps = function(){
