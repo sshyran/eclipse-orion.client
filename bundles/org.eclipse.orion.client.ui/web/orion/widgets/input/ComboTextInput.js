@@ -164,6 +164,13 @@ define([
 				this._inputCompletion._proposeOn();
 				lib.stop(event);
 			}.bind(this)); //$NON-NLS-0$
+			
+			this._textInputNode.addEventListener("keydown", function(event) { //$NON-NLS-0$
+				if (event.keyCode === lib.KEY.ENTER && event.shiftKey) {
+					this._inputCompletion._proposeOn();
+					lib.stop(event);
+				}
+			}.bind(this));
 
 			var recentEntryArray = this.getRecentEntryArray();
 			if (forceShowRecentEntryButton || (recentEntryArray && (0 < recentEntryArray.length)) ) {
