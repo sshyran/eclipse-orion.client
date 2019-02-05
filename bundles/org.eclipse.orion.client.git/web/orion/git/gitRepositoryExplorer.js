@@ -747,6 +747,7 @@ define([
 				} else {
 					explorer.select(repository.status);
 				}
+				explorer.getNavHandler().focus();
 
 				mMetrics.logPageLoadTiming("complete", window.location.pathname); //$NON-NLS-0$
 				this.loadingDeferred.resolve();
