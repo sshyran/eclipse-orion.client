@@ -35,23 +35,40 @@ define("orion/widgets/settings/EditorSettings", //$NON-NLS-0$
 	function addLocalIndicator(widget, property, info, options, prefs, editorSettings) {
 		if (!options.local) {
 			var indicator = document.createElement("span"); //$NON-NLS-0$
+			indicator.tabIndex = 0;
+			indicator.setAttribute("role", "button");
+			var checked = prefs[property + "LocalVisible"];
 			indicator.classList.add(localIndicatorClass);
-			indicator.classList.add(prefs[property + "LocalVisible"] ? on : off); //$NON-NLS-0$
+			toggleIndicatorSwitch(indicator, property, checked);
 			indicator.title = messages.localSettingsTooltip;
-			indicator.addEventListener("click", function(e) { //$NON-NLS-0$
-				if (indicator.classList.contains(off)) {
-					indicator.classList.add(on);
-					indicator.classList.remove(off);
-				} else {
-					indicator.classList.add(off);
-					indicator.classList.remove(on);
+			indicator.addEventListener("keydown", function(e) { //$NON-NLS-0$
+				if (e.keyCode === lib.KEY.SPACE) {
+					toggleIndicatorSwitch(indicator, property, indicator.classList.contains(off), editorSettings);
+					e.preventDefault();
 				}
-				editorSettings.update();
+			});
+			indicator.addEventListener("click", function(e) { //$NON-NLS-0$
+				toggleIndicatorSwitch(indicator, property, indicator.classList.contains(off), editorSettings);
 			});
 			var label = lib.$("label", widget.node); //$NON-NLS-0$
 			label.parentNode.insertBefore(indicator, label);
 		}
 		return widget;
+	}
+	
+	function toggleIndicatorSwitch(indicator, property, checked, editorSettings) {
+		if (checked) {
+			indicator.classList.add(on);
+			indicator.classList.remove(off);
+			indicator.setAttribute("aria-pressed", "true"); //$NON-NLS-0$ //$NON-NLS-1$
+			indicator.setAttribute("aria-label", messages[property] + " Local Setting On"); //$NON-NLS-0$ //$NON-NLS-1$
+		} else {
+			indicator.classList.add(off);
+			indicator.classList.remove(on);
+			indicator.setAttribute("aria-pressed", "false"); //$NON-NLS-0$ //$NON-NLS-1$
+			indicator.setAttribute("aria-label", messages[property] + " Local Setting Off"); //$NON-NLS-0$ //$NON-NLS-1$
+		}
+		if (editorSettings) editorSettings.update();
 	}
 
 	function createBooleanProperty(property, options, prefs, editorSettings) {
