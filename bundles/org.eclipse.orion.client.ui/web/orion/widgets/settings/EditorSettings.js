@@ -319,19 +319,21 @@ define("orion/widgets/settings/EditorSettings", //$NON-NLS-0$
 					} else {
 						var infoText = document.createElement("div"); //$NON-NLS-0$
 						infoText.classList.add("setting-info"); //$NON-NLS-0$
+						infoText.id = "setting-info"; //$NON-NLS-0$
 						infoText.textContent = messages.editorSettingsInfo;
 						var onIcon = document.createElement("span"); //$NON-NLS-0$
 						onIcon.classList.add(localIndicatorClass);
 						onIcon.classList.add(on);
-						var offIcon = document.createElement("span"); //$NON-NLS-0$
-						offIcon.classList.add(localIndicatorClass);
-						offIcon.classList.add(off);
+						onIcon.setAttribute("role", "img"); //$NON-NLS-1$ //$NON-NLS-0$
+						onIcon.setAttribute("aria-label", messages["localSettingsButton"]); //$NON-NLS-0$
 						var wrenchIcon = document.createElement("span"); //$NON-NLS-0$
 						wrenchIcon.classList.add("core-sprite-wrench"); //$NON-NLS-0$
 						wrenchIcon.classList.add("icon-inline"); //$NON-NLS-0$
 						wrenchIcon.classList.add("imageSprite"); //$NON-NLS-0$
-						lib.processDOMNodes(infoText, [onIcon, offIcon, wrenchIcon]);
+						wrenchIcon.setAttribute("aria-hidden", "true"); //$NON-NLS-1$ //$NON-NLS-0$
+						lib.processDOMNodes(infoText, [onIcon, wrenchIcon]);
 						sectionWidget.getContentElement().appendChild(infoText);
+						sectionWidget.getContentElement().parentElement.setAttribute("aria-describedby", infoText.id); //$NON-NLS-0$
 					}
 					for (var subsection in sections[section]) {
 						if (sections[section].hasOwnProperty(subsection)) {
