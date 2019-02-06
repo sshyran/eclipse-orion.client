@@ -13,6 +13,8 @@ define("orion/widgets/settings/EditorSettings", //$NON-NLS-0$
 [
 	'i18n!orion/settings/nls/messages', //$NON-NLS-0$
 	'orion/section', //$NON-NLS-0$
+	'orion/webui/tooltip', //$NON-NLS-0$
+	'orion/i18nUtil', //$NON-NLS-0$
 	'orion/commands', //$NON-NLS-0$
 	'orion/objects', //$NON-NLS-0$
 	'orion/PageLinks',
@@ -22,7 +24,7 @@ define("orion/widgets/settings/EditorSettings", //$NON-NLS-0$
 	'orion/widgets/input/SettingsSelect', //$NON-NLS-0$
 	'orion/widgets/settings/Subsection', //$NON-NLS-0$
 	'orion/urlModifier'
-], function (messages, mSection, commands, objects, PageLinks, lib, SettingsTextfield, SettingsCheckbox, SettingsSelect, Subsection, urlModifier) {
+], function (messages, mSection, mTooltip, i18nUtil, commands, objects, PageLinks, lib, SettingsTextfield, SettingsCheckbox, SettingsSelect, Subsection, urlModifier) {
 	var KEY_MODES = [
 		{value: "", label: messages.Default},
 		{value: "Emacs", label: "Emacs"}, //$NON-NLS-1$ //$NON-NLS-2$
@@ -40,11 +42,15 @@ define("orion/widgets/settings/EditorSettings", //$NON-NLS-0$
 			var checked = prefs[property + "LocalVisible"];
 			indicator.classList.add(localIndicatorClass);
 			toggleIndicatorSwitch(indicator, property, checked);
-			indicator.title = messages.localSettingsTooltip;
+			indicator.tooltip = new mTooltip.Tooltip({
+				node: indicator,
+				text: messages.localSettingsTooltip,
+				position: ["above", "below", "right", "left"] //$NON-NLS-0$ //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			});
 			indicator.addEventListener("keydown", function(e) { //$NON-NLS-0$
-				if (e.keyCode === lib.KEY.SPACE) {
+				if (e.keyCode === lib.KEY.SPACE || e.keyCode === lib.KEY.ENTER) {
 					toggleIndicatorSwitch(indicator, property, indicator.classList.contains(off), editorSettings);
-					e.preventDefault();
+					lib.stop(e);
 				}
 			});
 			indicator.addEventListener("click", function(e) { //$NON-NLS-0$
@@ -61,13 +67,12 @@ define("orion/widgets/settings/EditorSettings", //$NON-NLS-0$
 			indicator.classList.add(on);
 			indicator.classList.remove(off);
 			indicator.setAttribute("aria-pressed", "true"); //$NON-NLS-0$ //$NON-NLS-1$
-			indicator.setAttribute("aria-label", messages[property] + " Local Setting On"); //$NON-NLS-0$ //$NON-NLS-1$
 		} else {
 			indicator.classList.add(off);
 			indicator.classList.remove(on);
 			indicator.setAttribute("aria-pressed", "false"); //$NON-NLS-0$ //$NON-NLS-1$
-			indicator.setAttribute("aria-label", messages[property] + " Local Setting Off"); //$NON-NLS-0$ //$NON-NLS-1$
 		}
+		indicator.setAttribute("aria-label", i18nUtil.formatMessage(messages.localSettings, messages[property])); //$NON-NLS-0$
 		if (editorSettings) editorSettings.update();
 	}
 

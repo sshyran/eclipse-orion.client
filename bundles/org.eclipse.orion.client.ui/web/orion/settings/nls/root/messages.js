@@ -253,6 +253,7 @@ define({//Default message bundle
 	"autoSaveTimeoutInvalid": "Invalid save interval.",
 	"scrollAnimationTimeoutInvalid": "Invalid scrolling duration.",
 	"tabSizeInvalid": "Invalid tab size.",
+	"localSettings": "\"${0}\" Local Settings",
 	"localSettingsTooltip": "Toggle whether this setting is shown in the local editor settings drop down.",
 	"editorSettingsInfo": "Use the ${0} and ${1} to toggle whether a given setting is shown in the local editor settings drop down ${2}.",
 	"autoPairParentheses": "Autopair (Parentheses):",
