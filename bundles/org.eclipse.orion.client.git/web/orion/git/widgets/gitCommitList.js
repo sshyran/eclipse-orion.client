@@ -363,7 +363,7 @@ define([
 				fullList = children;
 			}
 			if (item.NextLocation) {
-				fullList.push({Type: type, NextLocation: item.NextLocation, selectable: false, isNotSelectable: true}); //$NON-NLS-0$
+				fullList.push({Type: type, NextLocation: item.NextLocation});
 			}
 			return fullList;
 		},
@@ -1283,6 +1283,12 @@ define([
 					commitInfo.moreButton.addEventListener("click", function() { //$NON-NLS-0$
 						item.full = !item.full;
 						explorer.myTree.redraw(item);
+					});
+					tableRow.addEventListener("blur", function() {
+						commitInfo.moreButton.tabIndex = -1;
+					});
+					tableRow.addEventListener("focus", function() {
+						commitInfo.moreButton.tabIndex = 0;
 					});
 					
 					var itemActionScope = "itemLevelCommands"; //$NON-NLS-0$
