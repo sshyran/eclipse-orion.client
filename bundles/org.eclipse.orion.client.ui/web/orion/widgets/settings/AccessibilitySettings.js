@@ -27,6 +27,7 @@ define([
 				new mSection.Section(this.node, {
 					id: "accessibility", //$NON-NLS-0$
 					title: messages.Accessibility,
+					headingLevel: 2,
 					content: '<div class="setting-row" id="setting-row-a11y">', //$NON-NLS-0$
 				});
 

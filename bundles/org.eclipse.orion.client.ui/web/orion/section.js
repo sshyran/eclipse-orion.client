@@ -41,6 +41,7 @@ define([
 	 * @param {Boolean} [options.dropdown] if true the section is dropdown
 	 * @param {Boolean} [options.noArrow] if true no dropdown arrow
 	 * @param {Function} [options.onExpandCollapse] a function that will be called when the expanded/collapsed state changes
+	 * @param {int} [options.headingLevel] if defined, the section title element will be a heading with the specified level (not valid with canHide)
 	 *
 	 * @borrows orion.editor.EventTarget#addEventListener as #addEventListener
 	 * @borrows orion.editor.EventTarget#removeEventListener as #removeEventListener
@@ -269,6 +270,11 @@ define([
 			// if not dropdown, mark up _sectionContainer as region landmark
 			this._sectionContainer.setAttribute("role", "region"); //$NON-NLS-1$ //$NON-NLS-0$
 			this._sectionContainer.setAttribute("aria-labelledby", this.titleNode.id); //$NON-NLS-0$
+			// the region landmark's title node can optionally be a heading
+			if (options.headingLevel && !options.canHide) {
+				this.titleNode.setAttribute("role", "heading"); //$NON-NLS-1$ //$NON-NLS-0$
+				this.titleNode.setAttribute("aria-level", options.headingLevel); //$NON-NLS-0$
+			}
 		}
 		
 		// initially style as hidden until we determine what needs to happen
