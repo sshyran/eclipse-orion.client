@@ -405,7 +405,7 @@ define({//Default message bundle
 	"Single Page": "Single Page",
 	"Help": "Help",
 	"Orion Content (localhost)": "Orion Content (localhost)",
-	"Choose Filesystem": "Choose Filesystem",
+	"Choose Filesystem": "Filesystem",
 	"Navigator": "Navigator",
     'customizeTheme': 'Custom Theme...',
     'moreEditorSettings': 'Editor Settings...',

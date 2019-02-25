@@ -321,7 +321,8 @@ objects.mixin(TabWidget.prototype, {
 
 		var tabCommand = new mCommands.Command({
 			selectionClass: "dropdownSelection",
-			name: util.isMac ? messages["AllTabsDropDownMac"] : messages["AllTabsDropDown"],
+			name: messages["AllTabs"],
+			tooltip: util.isMac ? messages["AllTabsDropDownMac"] : messages["AllTabsDropDown"],
 			imageClass: "core-sprite-list",
 			id: "orion.edit.selectEditor",
 			visableWhen: function() {

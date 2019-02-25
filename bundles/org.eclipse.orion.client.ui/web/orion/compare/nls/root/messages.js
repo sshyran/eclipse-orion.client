@@ -9,7 +9,7 @@
  ******************************************************************************/
 /*eslint-env browser, amd*/
 define({//Default message bundle
-	"CpCurChangeRightToLeft": "Copy current change from right to left",
+	"CpCurChangeRightToLeft": "Revert current change",
 	"CpCurChangeLeftToRight": "Copy current change from left to right",
 	"Switch to unified diff": "Switch to unified diff",
 	"Unified": "Unified diff",
@@ -17,8 +17,8 @@ define({//Default message bundle
 	"Side by side": "Side by side diff",
 	"GenerateCurDiffLink": "Generate link of the current diff",
 	"Generate Link": "Generate Link",
-	"Next diff block": "Next diff block",
-	"Previous diff block": "Previous diff block",
+	"Next diff block": "Next diff",
+	"Previous diff block": "Previous diff",
 	"Next diff change": "Next diff change",
 	"Previous diff change": "Previous diff change",
 	"Copy the link URL:": "Copy the link URL:",
@@ -47,7 +47,7 @@ define({//Default message bundle
 	'comparingFile': 'Comparing: ${0}...',
 	'compareTreeTitle': 'Compare Folders',
 	'compareFileTitle': 'Compare Files',
-	'IgnoreWhitespace': 'Ignore white space',
+	'IgnoreWhitespace': 'White space',
 	'IgnoreWhitespaceTooltip': 'Ignore white space where applicable',
 	'UseWhitespace': 'Use white space',
 	'UseWhitespaceTooltip': 'Compare white space where applicable',

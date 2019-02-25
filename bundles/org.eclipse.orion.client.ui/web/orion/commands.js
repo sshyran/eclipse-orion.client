@@ -215,6 +215,13 @@ define([
 			if(!showName) {
 				menuButton.textContent = ""; //$NON-NLS-0$
 				menuButton.setAttribute("aria-label", name); //$NON-NLS-0$
+				if (true) {
+					menuButton.style = "background-color: yellow;";
+					var span = document.createElement("span");
+					span.style = "vertical-align: middle";
+					span.appendChild(document.createTextNode(name));
+					menuButton.appendChild(span);
+				}
 			}
 			_addImageToElement({ spriteClass: "commandSprite", imageClass: buttonIconClass }, menuButton, name); //$NON-NLS-0$
 			menuButton.classList.add("orionButton"); //$NON-NLS-0$
@@ -363,6 +370,13 @@ define([
 						// ensure there is accessible text describing this image
 						if (command.name) {
 							element.setAttribute("aria-label", command.name); //$NON-NLS-0$
+							if (true) {
+								element.style = "background-color: yellow;";
+								var span = document.createElement("span");
+								span.style = "vertical-align: middle";
+								span.appendChild(document.createTextNode(command.name));
+								element.appendChild(span);
+							}
 						}
 					} else {
 						element.classList.add("commandButton"); //$NON-NLS-0$
@@ -384,6 +398,13 @@ define([
 				// ensure there is accessible text describing this image
 				if (command.name) {
 					element.setAttribute("aria-label", command.name); //$NON-NLS-0$
+					if (true) {
+						element.style = "background-color: yellow;";
+						var span = document.createElement("span");
+						span.style = "vertical-align: middle";
+						span.appendChild(document.createTextNode(command.name));
+						element.appendChild(span);
+					}
 				}
 			} else {
 				element.className = "commandLink"; //$NON-NLS-0$
