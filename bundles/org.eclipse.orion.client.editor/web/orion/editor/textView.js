@@ -5745,7 +5745,6 @@ define("orion/editor/textView", [
 			rootDiv.style.height = "100%"; //$NON-NLS-1$
 			rootDiv.style.overflow = "hidden"; //$NON-NLS-1$
 			rootDiv.style.WebkitTextSizeAdjust = "100%"; //$NON-NLS-1$
-			this._setLabel(this._label, true);
 			_parent.appendChild(rootDiv);
 			
 			var leftDiv = this._createRulerParent(doc, "textviewLeftRuler"); //$NON-NLS-1$
@@ -5896,6 +5895,7 @@ define("orion/editor/textView", [
 				}
 			}
 			DOMReady(doc, rootDiv, "textview", checkDOMReady); //$NON-NLS-1$
+			this._setLabel(this._label, true);
 		},
 		_defaultOptions: function() {
 			return {
@@ -7119,10 +7119,11 @@ define("orion/editor/textView", [
 		},
 		_setLabel: function(label) {
 			if (label === "__hidden__" ) {
-				this._rootDiv.setAttribute("aria-hidden", "true"); //$NON-NLS-1$
+				this._clientDiv.setAttribute("aria-hidden", "true"); //$NON-NLS-1$
 			} else {
-				this._rootDiv.setAttribute("role", "application"); //$NON-NLS-1$ //$NON-NLS-2$
-				this._rootDiv.setAttribute("aria-label", label); //$NON-NLS-1$
+				this._clientDiv.setAttribute("role", "textbox"); //$NON-NLS-1$ //$NON-NLS-2$
+				this._clientDiv.setAttribute("aria-label", label); //$NON-NLS-1$
+				this._clientDiv.setAttribute("aria-multiline", true);
 			}
 		},
 		_setMarginOffset: function(marginOffset, init) {
