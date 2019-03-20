@@ -1059,6 +1059,9 @@ define("orion/editor/editor", [
 						that._hoverTimeout = null;
 					}
 				},
+				onOptions: /* @callback */ function(e) {
+					that._updateCursorStatus();
+				},
 				onSelection: function(e) {
 					if (tooltip) { tooltip.hide(); }
 					that._updateCursorStatus();
@@ -1067,6 +1070,7 @@ define("orion/editor/editor", [
 			};
 			textView.addEventListener("ModelChanged", this._listener.onModelChanged); //$NON-NLS-0$
 			textView.addEventListener("Selection", this._listener.onSelection); //$NON-NLS-0$
+			textView.addEventListener("Options", this._listener.onOptions); //$NON-NLS-0$
 			textView.addEventListener("MouseOver", this._listener.onMouseOver); //$NON-NLS-0$
 			textView.addEventListener("MouseOut", this._listener.onMouseOut); //$NON-NLS-0$
 			textView.addEventListener("MouseDown", this._listener.onMouseDown); //$NON-NLS-0$
@@ -1285,9 +1289,9 @@ define("orion/editor/editor", [
 
 		_updateCursorStatus: function() {
 			// If we are in a mode and it owns status reporting, we bail out from reporting the cursor position.
-			var keyModes = this.getKeyModes();
+			var keyModes = this.getKeyModes(), mode;
 			for (var i=0; i<keyModes.length; i++) {
-				var mode = keyModes[i];
+				mode = keyModes[i];
 				if (mode.isActive() && mode.isStatusActive && mode.isStatusActive()) {
 					return;
 				}
@@ -1302,10 +1306,20 @@ define("orion/editor/editor", [
 				var lineIndex = model.getLineAtOffset(caretOffset);
 				var lineStart = model.getLineStart(lineIndex);
 				var offsetInLine = caretOffset - lineStart;
+				mode = [];
+				if (!this.getTextView().getOptions("readonly")) mode.push("\u270D");
+				if (this.getTextView().getOptions("overwriteMode")) mode.push("\u21A6");
+				if (!this.getTextView().getOptions("tabMode")) mode.push("\u21b9");
+//				if (!this.getTextView().getOptions("tabMode")) mode.push("TAB");
+//				if (this.getTextView().getOptions("overwriteMode")) mode.push("OVER");
+//				if (!this.getTextView().getOptions("readonly")) mode.push("READ");
+				if (!mode.length) {
+					mode.push("NONE");
+				}
 				if (localStorage.languageTools){
-					_status = util.formatMessage(messages.lineColumnOffset, lineIndex + 1, offsetInLine + 1, caretOffset);
+					_status = util.formatMessage(messages.lineColumnOffset, lineIndex + 1, offsetInLine + 1, caretOffset, mode.join(" - "));
 				} else {
-					_status = util.formatMessage(messages.lineColumn, lineIndex + 1, offsetInLine + 1);
+					_status = util.formatMessage(messages.lineColumn, lineIndex + 1, offsetInLine + 1, mode.join(" - "));
 				}
 			}
 			this.reportStatus(_status);

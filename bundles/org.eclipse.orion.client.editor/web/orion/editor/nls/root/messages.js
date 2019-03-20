@@ -138,8 +138,8 @@ define({//Default message bundle
 	"contentAssist": "Content Assist", //$NON-NLS-1$ //$NON-NLS-0$
 	"noProposals": "No proposals found",
 	"computingProposals": "Computing content assist proposals...",
-	"lineColumn": "Line ${0} : Column ${1}", //$NON-NLS-1$ //$NON-NLS-0$
-	"lineColumnOffset": "Line ${0} : Column ${1} : Offset ${2}",
+	"lineColumn": "Line ${0} : Column ${1} : ${2}", //$NON-NLS-1$ //$NON-NLS-0$
+	"lineColumnOffset": "Line ${0} : Column ${1} : Offset ${2} : ${3}",
 	"multiSelections": "${0} selection regions", //$NON-NLS-1$ //$NON-NLS-0$
 	
 	//vi
