@@ -1307,9 +1307,12 @@ define("orion/editor/editor", [
 				var lineStart = model.getLineStart(lineIndex);
 				var offsetInLine = caretOffset - lineStart;
 				mode = [];
-				if (!this.getTextView().getOptions("readonly")) mode.push("\u270D");
-				if (this.getTextView().getOptions("overwriteMode")) mode.push("\u21A6");
+				if (!this.getTextView().getOptions("readonly")) mode.push("\u270E");
+				if (this.getTextView().getOptions("readonly")) mode.push("\u1F6C7");
+				
+//				if (this.getTextView().getOptions("overwriteMode")) mode.push("\u21A6");
 				if (!this.getTextView().getOptions("tabMode")) mode.push("\u21b9");
+				if (this.getTextView().getOptions("tabMode")) mode.push("\u21E5");
 //				if (!this.getTextView().getOptions("tabMode")) mode.push("TAB");
 //				if (this.getTextView().getOptions("overwriteMode")) mode.push("OVER");
 //				if (!this.getTextView().getOptions("readonly")) mode.push("READ");
@@ -1317,9 +1320,9 @@ define("orion/editor/editor", [
 					mode.push("NONE");
 				}
 				if (localStorage.languageTools){
-					_status = util.formatMessage(messages.lineColumnOffset, lineIndex + 1, offsetInLine + 1, caretOffset, mode.join(" - "));
+					_status = util.formatMessage(messages.lineColumnOffset, lineIndex + 1, offsetInLine + 1, caretOffset, mode.join(" "));
 				} else {
-					_status = util.formatMessage(messages.lineColumn, lineIndex + 1, offsetInLine + 1, mode.join(" - "));
+					_status = util.formatMessage(messages.lineColumn, lineIndex + 1, offsetInLine + 1, mode.join(" "));
 				}
 			}
 			this.reportStatus(_status);
