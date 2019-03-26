@@ -1308,7 +1308,7 @@ define("orion/editor/editor", [
 				var offsetInLine = caretOffset - lineStart;
 				mode = [];
 				if (!this.getTextView().getOptions("readonly")) mode.push("\u270E");
-				if (this.getTextView().getOptions("readonly")) mode.push("\u1F6C7");
+				if (this.getTextView().getOptions("readonly")) mode.push("\u00D8");
 				
 //				if (this.getTextView().getOptions("overwriteMode")) mode.push("\u21A6");
 				if (!this.getTextView().getOptions("tabMode")) mode.push("\u21b9");
